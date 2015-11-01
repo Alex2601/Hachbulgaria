@@ -1,0 +1,61 @@
+<?php
+/*
+HackBulgaria Application Fall 2015
+
+Author: Aleksandar Yosifow: a.yosifow91@gmail.com
+*/
+
+/* Check if dependencies.json exists and parse it */
+$dep = "dependencies.json";
+if(!file_exists($dep))
+	die($dep . " was not found.\n");
+$info = json_decode(file_get_contents($dep));
+
+/* Check if all_packages.json exists and parse it */
+$all = "all_packages.json";
+if(!file_exists($all))
+	die($all . " was not found.\n");
+$all_load = json_decode(file_get_contents($all));
+
+/* Create installed_modules directory */
+if(!mkdir("installed_modules"))
+	die("installed_modules could not be created.\n");
+
+/* Show the list of dependencies */
+echo "Project " . $info->{'projectName'} . "\n";
+foreach($info->{'dependencies'} as $dep)
+{
+	dinstall($dep, $all_load);
+}
+
+/* The magic function to do magic */
+function dinstall($dependency,&$all_packages)
+{
+	/* Check if the dependency has been already created so we don't create it again */
+	if(file_exists("installed_modules/" . $dependency))
+		return;
+	
+	echo "Installing " . $dependency . ".\n";
+
+	/* If we have other dependencies on this one, we will install them */
+	if(!empty($all_packages->{$dependency}))
+	{
+		echo "In order to install " . $dependency . ", we need " . implode (" and ",$all_packages->{$dependency}) . ".\n";
+		foreach($all_packages->{$dependency} as $dep)
+		{
+			dinstall($dep,$all_packages);
+		}			
+	}
+
+	/* After all the dependencies were installed, we can install this one */
+	createm($dependency);	
+	echo "Installed " . $dependency . ".\n";
+}
+
+/* Simple function to create the file in installed_modules */
+function createm($name)
+{
+	$fh = fopen("installed_modules/" . $name,"w");
+	fwrite($fh, $name . ".\n");
+	fclose($fh);
+}
