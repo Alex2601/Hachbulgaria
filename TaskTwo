@@ -1,0 +1,104 @@
+public class TaskTwo {
+	public static void main(String[] args){
+		
+				{'i', 'v', 'a',	'n'},
+				{'e', 'v', 'n', 'h'},
+				{'i', 'n', 'a',	'v'},
+				{'m', 'v', 'v',	'n'},
+				{'q', 'r', 'i', 't'}
+		};
+		String word = "ivan";
+		int wordLen = word.length();
+		boolean match = false;
+		int count = 0;
+		for (int row = 0; row < matrix.length - 1; row++) {
+			for (int col = 0; col < matrix[row].length - wordLen + 1; col++) {
+				if(matrix[row][col] == word.charAt(0)) //ако първата буква съвпада
+					//проверяваме и останалите
+					match=true;
+					for(int i=1; i< wordLen; i++)
+					{
+						if(matrix[row][col+1]!=word.charAt(i)) //ако някъде открием несъответствие, то прекъсваме
+						{
+							match = false;
+							break;
+						}
+					}
+					if(match) //ако по-горе не сме прекъснали никъде, значи имаме съвпадение
+					{
+						count++;
+					}
+			}
+			
+		}
+		System.out.println(count);*/
+		char[][] matrix = {
+				{'i', 'v', 'a',	'n'},
+				{'e', 'v', 'n', 'h'},
+				{'i', 'n', 'a',	'v'},
+				{'m', 'v', 'v',	'n'},
+				{'q', 'r', 'i', 't'}
+		};
+		String word = "ivan";
+		int wordLen = word.length();
+		String reversed = new StringBuffer(word).reverse().toString();
+		boolean match = false;
+		int count = 0;
+		for (int row = 0; row < matrix.length - 2; row++) {
+			for (int col = 0; col < matrix[0].length - 2; col++) {
+				if(matrix[row][col] == word.charAt(0)) //ако първата буква съвпада
+					//проверяваме и останалите
+					match=true;
+					for(int i=1; i< wordLen; i++)
+					{
+						if(matrix[row][col+i] != word.charAt(i)) //ако някъде открием несъответствие, то прекъсваме
+						{ 
+							System.out.println(word);
+							match = false;
+							break;
+						}
+						if(matrix[row+i][col+i] != word.charAt(i)){
+							match = false;
+							break;
+						}
+					}
+					
+					}
+			if(match) //ако по-горе не сме прекъснали никъде, значи имаме съвпадение
+			{
+				count++;
+			}
+
+			}
+		
+		for (int row = matrix.length - 1 ; row > 0 ; --row) {
+			for (int col = matrix[0].length - 1; col > 0; --col) {
+				if(matrix[row][col] == word.charAt(0)) //ако първата буква съвпада
+					//проверяваме и останалите
+					match=true;
+				for(int i = wordLen - 1; i > 0; --i){
+					if(matrix[row-i][col-i] != reversed.charAt(i-1)){//проверяваме обратния диагонал
+						match = true;
+						System.out.println(wordLen);
+						break;
+						
+					}
+					if(matrix[row-i][col] != word.charAt(i)){
+						match = false;
+						break;
+					}
+					if(matrix[row][col-i] != word.charAt(i)){
+						match = false;
+						break;
+						
+					}
+				}
+			}
+			
+		
+		System.out.println(count);
+	}
+	}
+}
+
+
